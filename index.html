@@ -89,6 +89,7 @@
         };
     </script>
     <meta id="meta-9nigd2" name="description" content="병원? 약국? 회사? 공직? 약준모에서 신입 약사의 진로와 현실을 한 번에 확인하세요." />
+    <!-- [EDIT: 사이트 메타데이터 (검색결과, 공유 시 뜨는 제목)] -->
     <meta id="meta-v06ulu" name="title" content="2026 약준모 신입 약사특강" />
     <meta id="meta-yw3oin" name="robots" content="noindex" />
     <meta id="meta-1ab1uk" name="twitter:card" content="summary_large_image" />
@@ -202,6 +203,16 @@
 </head>
 
 <body>
+    <!-- =========================================================
+     [약준모 특강 템플릿 - 매년 업데이트 가이드]
+     1. 연도 변경: 에디터에서 '2026'을 검색하여 다음 연도(예: 2027)로 모두 변경하세요.
+     2. 일시/장소 변경: [EDIT: 일시 및 장소] 검색 후 해당 텍스트 수정
+     3. 메인 배너 및 연자 사진: assets/images 폴더 내의 이미지 파일들을 
+        동일한 이름(background-hero.png, speaker-1-profile.png 등)으로 덮어쓰기 하세요.
+     4. 연자 정보: [EDIT: 연자 정보] 등을 검색하여 이름과 약력을 수정하세요.
+     5. 링크 및 링크 버튼: [EDIT: 링크] 주석을 참고하여 이동 URL을 변경하세요.
+========================================================== -->
+
     <script data-template-id="country-code">
         window.__cf_country = "KR";
     </script>
@@ -215,8 +226,9 @@
                             class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md text-[#1a2332] z-50 shadow-sm border-b border-white/20">
                             <div class="max-w-6xl mx-auto px-4 py-3">
                                 <div class="md:hidden">
-                                    <div class="flex items-center justify-center gap-2 mb-3">
-                                        <img src="./assets/images/logo_1.svg" alt="약준모 로고" class="h-8" />
+                                    <div class="flex items-center justify-center gap-2 mb-3 cursor-pointer"
+                                        onclick="window.location.href='index.html'">
+                                        <img src="./assets/images/logo.svg" alt="약준모 로고" class="h-8" />
                                         <div class="text-sm text-[#1a2332]" style="
                           font-family: &quot;Gmarket Sans&quot;, sans-serif;
                           font-weight: 500;
@@ -225,7 +237,7 @@
                                         </div>
                                     </div>
                                     <div class="flex gap-2 justify-center">
-                                        <button
+                                        <button onclick="window.location.href='index.html'"
                                             class="px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-[#4a90e2] text-white shadow-sm">
                                             특강 안내</button><button
                                             class="px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-white border-2 border-[#4a90e2] text-[#4a90e2] hover:bg-[#f0f7ff]">
@@ -234,8 +246,9 @@
                                     </div>
                                 </div>
                                 <div class="hidden md:flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <img src="./assets/images/logo_1.svg" alt="약준모 로고" class="h-10" />
+                                    <div class="flex items-center gap-3 cursor-pointer"
+                                        onclick="window.location.href='index.html'">
+                                        <img src="./assets/images/logo.svg" alt="약준모 로고" class="h-10" />
                                         <div class="text-base text-[#1a2332]" style="
                           font-family: &quot;Gmarket Sans&quot;, sans-serif;
                           font-weight: 500;
@@ -244,7 +257,7 @@
                                         </div>
                                     </div>
                                     <div class="flex gap-3">
-                                        <button
+                                        <button onclick="window.location.href='index.html'"
                                             class="px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-[#4a90e2] text-white shadow-sm">
                                             특강 안내</button><button
                                             class="px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-200 bg-white border-2 border-[#4a90e2] text-[#4a90e2] hover:bg-[#f0f7ff]">
@@ -423,8 +436,7 @@
                                         알차게 준비된 세미나 타임테이블을 확인하세요.
                                     </p>
                                     <div class="mb-8 flex flex-col items-center">
-                                        <img src="./assets/images/87cafc00cbad57559c2b2f92b8979cc417bf1f68.png"
-                                            alt="김태수 사회자"
+                                        <img src="./assets/images/hero-background.png" alt="김태수 사회자"
                                             class="w-20 h-20 rounded-full object-cover border-2 border-gray-200 mb-3" /><span
                                             class="inline-block bg-[#e8f4ea] text-[#2d5f3c] px-4 py-2 rounded-lg font-semibold">사회자:
                                             김태수</span>
@@ -434,8 +446,7 @@
                                             class="bg-white border border-slate-100 rounded-[24px] p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative z-10">
                                             <div class="flex items-start gap-4">
                                                 <div class="flex-shrink-0">
-                                                    <img src="./assets/images/e32fa25ed9656b76f769c65035d5ee9f28487b39.png"
-                                                        alt="박현진 (약준모 회장)"
+                                                    <img src="./assets/images/speaker-1-profile.png" alt="박현진 (약준모 회장)"
                                                         class="w-16 h-16 rounded-full object-cover border-2 border-gray-200" />
                                                 </div>
                                                 <div class="flex-1">
@@ -459,7 +470,7 @@
                                             class="bg-white border border-slate-100 rounded-[24px] p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative z-10">
                                             <div class="flex items-start gap-4">
                                                 <div class="flex-shrink-0">
-                                                    <img src="./assets/images/8bc4331e426fa0e206829b9adf8bfc2a1ff7d305.png"
+                                                    <img src="./assets/images/speaker-2-profile.png"
                                                         alt="민진홍 (서울숲팜프라자약국)"
                                                         class="w-16 h-16 rounded-full object-cover border-2 border-gray-200" />
                                                 </div>
@@ -484,7 +495,7 @@
                                             class="bg-white border border-slate-100 rounded-[24px] p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative z-10">
                                             <div class="flex items-start gap-4">
                                                 <div class="flex-shrink-0">
-                                                    <img src="./assets/images/8c55ebae03ca5d03364203398d90b21a966400dd.png"
+                                                    <img src="./assets/images/speaker-3-profile.png"
                                                         alt="신희망 (지킴 대표 회계사)"
                                                         class="w-16 h-16 rounded-full object-cover border-2 border-gray-200" />
                                                 </div>
@@ -507,8 +518,7 @@
                                             class="bg-white border border-slate-100 rounded-[24px] p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative z-10">
                                             <div class="flex items-start gap-4">
                                                 <div class="flex-shrink-0">
-                                                    <img src="./assets/images/a93831296a5bf66700d897d430b71d856d9b9cf5.png"
-                                                        alt="김준하 (파마리서치 BD)"
+                                                    <img src="./assets/images/speaker-1-detail.png" alt="김준하 (파마리서치 BD)"
                                                         class="w-16 h-16 rounded-full object-cover border-2 border-gray-200" />
                                                 </div>
                                                 <div class="flex-1">
@@ -546,7 +556,7 @@
                                             class="bg-white border border-slate-100 rounded-[24px] p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative z-10">
                                             <div class="flex items-start gap-4">
                                                 <div class="flex-shrink-0">
-                                                    <img src="./assets/images/3f49533b50aa588b306aea60644c17c45ffa074d.png"
+                                                    <img src="./assets/images/speaker-2-detail.png"
                                                         alt="안주원 (연세대 용인세브란스병원 약제팀)"
                                                         class="w-16 h-16 rounded-full object-cover border-2 border-gray-200" />
                                                 </div>
@@ -571,7 +581,7 @@
                                             class="bg-white border border-slate-100 rounded-[24px] p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative z-10">
                                             <div class="flex items-start gap-4">
                                                 <div class="flex-shrink-0">
-                                                    <img src="./assets/images/163eb7c8774db51a7c826af315e9027c78725d32.png"
+                                                    <img src="./assets/images/speaker-3-detail.png"
                                                         alt="박희진 (국립과학수사연구원)"
                                                         class="w-16 h-16 rounded-full object-cover border-2 border-gray-200" />
                                                 </div>
@@ -1044,7 +1054,7 @@
                                 </div>
                                 <div class="border-t border-white/10 pt-8">
                                     <div class="flex items-center gap-3 mb-4">
-                                        <img src="./assets/images/logo_1.svg" alt="Pharmmaker Logo" class="h-10" />
+                                        <img src="./assets/images/logo.svg" alt="Pharmmaker Logo" class="h-10" />
                                         <div>
                                             <div class="font-bold text-lg">
                                                 약사의 미래를 준비하는 모임
@@ -1103,7 +1113,7 @@
                 <div class="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-2xl">
                     <div class="sticky top-0 bg-gradient-to-br from-[#4a90e2] to-[#357abd] px-6 py-8 rounded-t-2xl">
                         <div class="flex flex-col items-center text-center">
-                            <img src="./assets/images/asset_e32fa25ed9656b76f769c65035d5ee9f28487b39.png" alt="박현진"
+                            <img src="./assets/images/asset_speaker-1-profile.png" alt="박현진"
                                 class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg mb-4" />
                             <h3 class="text-2xl text-white mb-1" style="
                     font-family: &quot;Gmarket Sans&quot;, sans-serif;
@@ -1181,7 +1191,7 @@
                 <div class="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-2xl">
                     <div class="sticky top-0 bg-gradient-to-br from-[#4a90e2] to-[#357abd] px-6 py-8 rounded-t-2xl">
                         <div class="flex flex-col items-center text-center">
-                            <img src="./assets/images/asset_8bc4331e426fa0e206829b9adf8bfc2a1ff7d305.png" alt="민진홍"
+                            <img src="./assets/images/asset_speaker-2-profile.png" alt="민진홍"
                                 class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg mb-4" />
                             <h3 class="text-2xl text-white mb-1" style="
                     font-family: &quot;Gmarket Sans&quot;, sans-serif;
@@ -1239,7 +1249,7 @@
                 <div class="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-2xl">
                     <div class="sticky top-0 bg-gradient-to-br from-[#4a90e2] to-[#357abd] px-6 py-8 rounded-t-2xl">
                         <div class="flex flex-col items-center text-center">
-                            <img src="./assets/images/asset_8c55ebae03ca5d03364203398d90b21a966400dd.png" alt="신희망"
+                            <img src="./assets/images/asset_speaker-3-profile.png" alt="신희망"
                                 class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg mb-4" />
                             <h3 class="text-2xl text-white mb-1" style="
                     font-family: &quot;Gmarket Sans&quot;, sans-serif;
@@ -1281,7 +1291,7 @@
                 <div class="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-2xl">
                     <div class="sticky top-0 bg-gradient-to-br from-[#4a90e2] to-[#357abd] px-6 py-8 rounded-t-2xl">
                         <div class="flex flex-col items-center text-center">
-                            <img src="./assets/images/asset_a93831296a5bf66700d897d430b71d856d9b9cf5.png" alt="김준하"
+                            <img src="./assets/images/asset_speaker-1-detail.png" alt="김준하"
                                 class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg mb-4" />
                             <h3 class="text-2xl text-white mb-1" style="
                     font-family: &quot;Gmarket Sans&quot;, sans-serif;
@@ -1357,7 +1367,7 @@
                 <div class="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-2xl">
                     <div class="sticky top-0 bg-gradient-to-br from-[#4a90e2] to-[#357abd] px-6 py-8 rounded-t-2xl">
                         <div class="flex flex-col items-center text-center">
-                            <img src="./assets/images/asset_3f49533b50aa588b306aea60644c17c45ffa074d.png" alt="안주원"
+                            <img src="./assets/images/asset_speaker-2-detail.png" alt="안주원"
                                 class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg mb-4" />
                             <h3 class="text-2xl text-white mb-1" style="
                     font-family: &quot;Gmarket Sans&quot;, sans-serif;
@@ -1415,7 +1425,7 @@
                 <div class="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-2xl">
                     <div class="sticky top-0 bg-gradient-to-br from-[#4a90e2] to-[#357abd] px-6 py-8 rounded-t-2xl">
                         <div class="flex flex-col items-center text-center">
-                            <img src="./assets/images/asset_163eb7c8774db51a7c826af315e9027c78725d32.png" alt="박희진"
+                            <img src="./assets/images/asset_speaker-3-detail.png" alt="박희진"
                                 class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg mb-4" />
                             <h3 class="text-2xl text-white mb-1" style="
                     font-family: &quot;Gmarket Sans&quot;, sans-serif;
@@ -1594,12 +1604,8 @@
             memberBtns.forEach((btn) => {
                 btn.addEventListener("click", (e) => {
                     e.preventDefault();
-                    // Scroll to Membership section
-                    const membershipHeader = Array.from(
-                        document.querySelectorAll("h2"),
-                    ).find((h) => h.innerText.includes("약준모는 꼭 가입하세요"));
-                    if (membershipHeader)
-                        membershipHeader.scrollIntoView({ behavior: "smooth" });
+                    // [EDIT: 모프회원 안내 클릭 시 열리는 페이지 링크 수정]
+                    window.open("membership.html", "_blank");
                 });
             });
 
