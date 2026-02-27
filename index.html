@@ -961,7 +961,8 @@
                                         </p>
                                         <div
                                             class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm border border-pink-100">
-                                            <span class="text-2xl font-bold text-pink-500">0</span><span
+                                            <span id="review-count"
+                                                class="text-2xl font-bold text-pink-500">0</span><span
                                                 class="text-gray-600 font-medium">개의 후기</span>
                                         </div>
                                     </div>
@@ -982,8 +983,8 @@
                                             </svg>후기 작성하기
                                         </button>
                                     </div>
-                                    <div class="space-y-5 schedule-timeline">
-                                        <div class="text-center py-12 bg-white rounded-2xl shadow-sm">
+                                    <div id="review-list" class="space-y-5 schedule-timeline">
+                                        <div class="text-center py-12 bg-white rounded-2xl shadow-sm" id="empty-review">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round"
@@ -1488,16 +1489,16 @@
                         </svg>
                     </button>
                 </div>
-                <form class="space-y-5 schedule-timeline">
+                <form id="review-form" class="space-y-5 schedule-timeline">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">이름 (익명)</label><input type="text"
-                            placeholder="홍길동"
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">이름 (익명)</label><input
+                            id="review-name" type="text" placeholder="홍길동"
                             class="w-full px-4 py-3 border-2 border-pink-100 rounded-xl focus:outline-none focus:border-pink-300 transition-colors"
                             maxlength="20" value="" />
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">전화번호 뒷자리 4자리 (수정/삭제
-                            비밀번호)</label><input type="text" placeholder="1234"
+                            비밀번호)</label><input id="review-password" type="text" placeholder="1234"
                             class="w-full px-4 py-3 border-2 border-pink-100 rounded-xl focus:outline-none focus:border-pink-300 transition-colors"
                             maxlength="4" value="" />
                         <p class="text-xs text-gray-500 mt-1">
@@ -1506,10 +1507,10 @@
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">후기 내용</label><textarea
-                            placeholder="특강에 대한 소중한 의견을 자유롭게 작성해주세요 💕"
+                            id="review-content" placeholder="특강에 대한 소중한 의견을 자유롭게 작성해주세요 💕"
                             class="w-full px-4 py-3 border-2 border-pink-100 rounded-xl focus:outline-none focus:border-pink-300 transition-colors min-h-[120px] resize-none"
                             maxlength="500"></textarea>
-                        <p class="text-xs text-gray-500 mt-1 text-right">0/500</p>
+                        <p id="review-char-count" class="text-xs text-gray-500 mt-1 text-right">0/500</p>
                     </div>
                     <div class="flex gap-3 pt-2">
                         <button type="button"
@@ -1653,11 +1654,174 @@
                         (text.includes("닫기") || text.includes("취소")) &&
                         btn.closest(".custom-modal-wrapper")
                     ) {
-                        e.preventDefault();
+                        if (btn.type !== 'submit') { // prevent default only if not submit
+                            e.preventDefault();
+                        }
                         closeModals();
                     }
                 }
             });
+
+            // 5. Review Logic (LocalStorage CRUD)
+            const LOCAL_STORAGE_KEY = 'yakjunmo_reviews';
+            let reviews = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
+
+            const reviewListEl = document.getElementById('review-list');
+            const reviewCountEl = document.getElementById('review-count');
+            const reviewForm = document.getElementById('review-form');
+            const reviewName = document.getElementById('review-name');
+            const reviewPassword = document.getElementById('review-password');
+            const reviewContent = document.getElementById('review-content');
+            const reviewCharCount = document.getElementById('review-char-count');
+
+            const renderReviews = () => {
+                if (reviewCountEl) reviewCountEl.innerText = reviews.length;
+                if (!reviewListEl) return;
+
+                if (reviews.length === 0) {
+                    reviewListEl.innerHTML = `
+                        <div class="text-center py-12 bg-white rounded-2xl shadow-sm" id="empty-review">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-message-circle w-16 h-16 mx-auto mb-4 text-gray-300">
+                                <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
+                            </svg>
+                            <p class="text-gray-500 font-medium mb-2">아직 작성된 후기가 없습니다</p>
+                            <p class="text-sm text-gray-400">첫 번째 후기를 남겨주세요! 🎉</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                reviewListEl.innerHTML = reviews.map((review, idx) => `
+                    <div class="bg-white border border-slate-100 rounded-[24px] p-6 hover:shadow-xl transition-all duration-300 relative z-10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 rounded-full bg-pink-400 flex items-center justify-center text-white font-bold text-lg shadow-sm">
+                                    ${review.name.substring(0, 1)}
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h4 class="font-bold text-[#1a2332] text-sm md:text-base">${review.name}</h4>
+                                        <p class="text-xs text-gray-400 mt-0.5">${review.date}</p>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <button onclick="editReview(${idx})" class="text-blue-500 hover:text-blue-700 transition-colors p-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path><path d="m15 5 4 4"></path></svg>
+                                        </button>
+                                        <button onclick="deleteReview(${idx})" class="text-red-500 hover:text-red-700 transition-colors p-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <p class="text-sm md:text-base text-gray-700 whitespace-pre-line leading-relaxed mt-2">${review.content}</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            };
+
+            const formatDate = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                return `${year}.${month}.${day} ${hours}:${minutes}`;
+            };
+
+            if (reviewForm) {
+                reviewContent.addEventListener('input', (e) => {
+                    const length = e.target.value.length;
+                    reviewCharCount.innerText = `${length}/500`;
+                });
+
+                reviewForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    if (!reviewName.value.trim() || !reviewPassword.value.trim() || !reviewContent.value.trim()) {
+                        alert('모든 항목을 입력해주세요.');
+                        return;
+                    }
+
+                    if (window.editingReviewIdx !== undefined && window.editingReviewIdx !== null) {
+                        // Edit Mode
+                        reviews[window.editingReviewIdx].name = reviewName.value.trim();
+                        reviews[window.editingReviewIdx].password = reviewPassword.value.trim();
+                        reviews[window.editingReviewIdx].content = reviewContent.value.trim();
+                        // reviews[window.editingReviewIdx].date = formatDate(new Date()); 
+                        window.editingReviewIdx = null;
+                        document.querySelector('#modal_write_review h3').innerText = '후기 작성하기 ✨';
+                        document.querySelector('#modal_write_review button[type="submit"]').innerText = '등록하기';
+                    } else {
+                        // Create Mode
+                        const newReview = {
+                            name: reviewName.value.trim(),
+                            password: reviewPassword.value.trim(),
+                            content: reviewContent.value.trim(),
+                            date: formatDate(new Date())
+                        };
+                        reviews.unshift(newReview); // Add to top
+                    }
+
+                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(reviews));
+                    renderReviews();
+                    closeModals();
+                    reviewForm.reset();
+                    reviewCharCount.innerText = '0/500';
+                });
+
+                // Also reset Edit Mode state on cancel
+                const cancelBtn = reviewForm.querySelector('button[type="button"]');
+                if (cancelBtn) {
+                    cancelBtn.addEventListener('click', () => {
+                        window.editingReviewIdx = null;
+                        document.querySelector('#modal_write_review h3').innerText = '후기 작성하기 ✨';
+                        document.querySelector('#modal_write_review button[type="submit"]').innerText = '등록하기';
+                        reviewForm.reset();
+                        reviewCharCount.innerText = '0/500';
+                    });
+                }
+            }
+
+            window.deleteReview = (idx) => {
+                const password = prompt("삭제를 위해 비밀번호(전화번호 뒷 4자리)를 입력해주세요.");
+                if (password === null) return;
+
+                if (password === reviews[idx].password) {
+                    if (confirm("정말로 이 후기를 삭제하시겠습니까?")) {
+                        reviews.splice(idx, 1);
+                        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(reviews));
+                        renderReviews();
+                    }
+                } else {
+                    alert("비밀번호가 일치하지 않습니다.");
+                }
+            };
+
+            window.editReview = (idx) => {
+                const password = prompt("수정을 위해 비밀번호(전화번호 뒷 4자리)를 입력해주세요.");
+                if (password === null) return;
+
+                if (password === reviews[idx].password) {
+                    const review = reviews[idx];
+                    reviewName.value = review.name;
+                    reviewPassword.value = review.password;
+                    reviewContent.value = review.content;
+                    reviewCharCount.innerText = `${review.content.length}/500`;
+
+                    window.editingReviewIdx = idx;
+                    document.querySelector('#modal_write_review h3').innerText = '후기 수정하기 ✨';
+                    document.querySelector('#modal_write_review button[type="submit"]').innerText = '수정하기';
+                    openModal('modal_write_review');
+                } else {
+                    alert("비밀번호가 일치하지 않습니다.");
+                }
+            };
+
+            renderReviews();
         });
     </script>
 </body>
