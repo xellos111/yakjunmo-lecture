@@ -19,7 +19,7 @@
   </style>
 </head>
 
-<body class="bg-white min-h-screen">
+<body class="bg-white min-h-screen antialiased">
   <div class="tailwind">
     <div class="min-h-screen bg-white">
       <header
@@ -70,8 +70,8 @@
           </div>
         </div>
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-gray-100/50 overflow-hidden">
-          <div
-            class="h-full bg-gradient-to-r from-pink-500 via-blue-500 to-purple-500 transition-all duration-150 ease-out shadow-sm"
+          <div id="scroll-progress"
+            class="h-full bg-gradient-to-r from-pink-500 via-blue-500 to-purple-500 transition-all duration-75 ease-out shadow-sm rounded-r-full"
             style="width: 0%"></div>
         </div>
       </header>
@@ -649,6 +649,19 @@
       </footer>
     </div>
   </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const progressBar = document.getElementById("scroll-progress");
+      if (progressBar) {
+        window.addEventListener("scroll", () => {
+          const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+          const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          const scrolled = (winScroll / height) * 100;
+          progressBar.style.width = scrolled + "%";
+        });
+      }
+    });
+  </script>
 </body>
 
 </html>
