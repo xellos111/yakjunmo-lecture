@@ -941,12 +941,12 @@
                                 <div class="max-w-2xl mx-auto">
                                     <div class="text-center mb-10">
                                         <div class="inline-block mb-4">
-                                            <div
-                                                class="w-16 h-16 bg-gradient-to-br from-pink-400 to-rose-500 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                                            <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto shadow-lg"
+                                                style="background: linear-gradient(to bottom right, #f472b6, #f43f5e); color: white;">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                    class="lucide lucide-message-circle w-8 h-8 text-white">
+                                                    class="lucide lucide-message-circle w-8 h-8">
                                                     <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
                                                 </svg>
                                             </div>
@@ -968,10 +968,13 @@
                                     </div>
                                     <div class="mb-8">
                                         <button id="btn-show-review-form"
-                                            class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-4 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+                                            class="w-full font-bold py-4 px-6 rounded-2xl shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
                                             style="
+                          background: linear-gradient(to right, #ec4899, #f43f5e);
+                          color: white;
                           font-family: &quot;Gmarket Sans&quot;, sans-serif;
-                        ">
+                        " onmouseover="this.style.background='linear-gradient(to right, #db2777, #e11d48)'"
+                                            onmouseout="this.style.background='linear-gradient(to right, #ec4899, #f43f5e)'">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round"
@@ -1022,7 +1025,10 @@
                                                     <button type="button" id="btn-cancel-review"
                                                         class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 px-6 rounded-xl transition-colors">닫기</button>
                                                     <button type="submit" id="btn-submit-review"
-                                                        class="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg">등록하기</button>
+                                                        class="flex-1 font-bold py-3 px-6 rounded-xl transition-all shadow-lg"
+                                                        style="background: linear-gradient(to right, #ec4899, #f43f5e); color: white;"
+                                                        onmouseover="this.style.background='linear-gradient(to right, #db2777, #e11d48)'"
+                                                        onmouseout="this.style.background='linear-gradient(to right, #ec4899, #f43f5e)'">등록하기</button>
                                                 </div>
                                             </form>
                                         </div>
