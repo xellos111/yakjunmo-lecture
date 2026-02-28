@@ -1677,8 +1677,8 @@
 
             // 5. Review Logic (LocalStorage CRUD)
             const LOCAL_STORAGE_KEY = 'yakjunmo_reviews';
-            let reviews = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
-
+            const BOARD_URL = 'https://xellos.top/board/640';
+            const POST_URL = 'https://xellos.top/';
             const reviewListEl = document.getElementById('review-list');
             const reviewCountEl = document.getElementById('review-count');
             const reviewForm = document.getElementById('review-form');
@@ -1687,11 +1687,50 @@
             const reviewContent = document.getElementById('review-content');
             const reviewCharCount = document.getElementById('review-char-count');
 
-            const renderReviews = () => {
-                if (reviewCountEl) reviewCountEl.innerText = reviews.length;
+            let csrfToken = '';
+
+            const loadComments = async () => {
+                try {
+                    const response = await fetch(BOARD_URL);
+                    const html = await response.text();
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+
+                    // Extract CSRF Token
+                    const csrfMeta = doc.querySelector('meta[name="csrf-token"]');
+                    if (csrfMeta) {
+                        csrfToken = csrfMeta.getAttribute('content');
+                    }
+
+                    // Extract comments
+                    const comments = [];
+                    const commentItems = doc.querySelectorAll('#cl > .fbList > ul > li:not(.secret)');
+
+                    commentItems.forEach(item => {
+                        const author = item.querySelector('.author')?.innerText.trim() || '익명';
+                        const dateText = item.querySelector('.date')?.innerText.trim() || '';
+                        const content = item.querySelector('.xe_content')?.innerHTML || '';
+                        const commentIdMatch = item.id ? item.id.match(/comment_(\d+)/) : null;
+                        const commentId = commentIdMatch ? commentIdMatch[1] : '';
+
+                        // Ignore replies to comments to keep the UI simple, or just render them flat
+                        comments.push({ id: commentId, author, dateText, content });
+                    });
+
+                    renderReviews(comments);
+                } catch (error) {
+                    console.error("Failed to load comments:", error);
+                    if (reviewListEl) {
+                        reviewListEl.innerHTML = `<div class="text-center py-12 text-gray-500">후기를 불러오는데 실패했습니다.</div>`;
+                    }
+                }
+            };
+
+            const renderReviews = (comments) => {
+                if (reviewCountEl) reviewCountEl.innerText = comments.length;
                 if (!reviewListEl) return;
 
-                if (reviews.length === 0) {
+                if (comments.length === 0) {
                     reviewListEl.innerHTML = `
                         <div class="text-center py-12 bg-white rounded-2xl shadow-sm" id="empty-review">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -1707,43 +1746,31 @@
                     return;
                 }
 
-                reviewListEl.innerHTML = reviews.map((review, idx) => `
+                reviewListEl.innerHTML = comments.map((review) => `
                     <div class="bg-white border border-slate-100 rounded-[24px] p-6 hover:shadow-xl transition-all duration-300 relative z-10">
                         <div class="flex items-start gap-4">
                             <div class="flex-shrink-0">
                                 <div class="w-12 h-12 rounded-full bg-pink-400 flex items-center justify-center text-white font-bold text-lg shadow-sm">
-                                    ${review.name.substring(0, 1)}
+                                    ${review.author.substring(0, 1)}
                                 </div>
                             </div>
                             <div class="flex-1">
                                 <div class="flex justify-between items-start mb-2">
                                     <div>
-                                        <h4 class="font-bold text-[#1a2332] text-sm md:text-base">${review.name}</h4>
-                                        <p class="text-xs text-gray-400 mt-0.5">${review.date}</p>
+                                        <h4 class="font-bold text-[#1a2332] text-sm md:text-base">${review.author}</h4>
+                                        <p class="text-xs text-gray-400 mt-0.5">${review.dateText}</p>
                                     </div>
                                     <div class="flex items-center gap-3">
-                                        <button onclick="editReview(${idx})" class="flex items-center gap-1 text-sm font-medium text-blue-500 hover:text-blue-700 transition-colors px-2 py-1 bg-blue-50 hover:bg-blue-100 rounded-lg">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path><path d="m15 5 4 4"></path></svg>수정
-                                        </button>
-                                        <button onclick="deleteReview(${idx})" class="flex items-center gap-1 text-sm font-medium text-red-500 hover:text-red-700 transition-colors px-2 py-1 bg-red-50 hover:bg-red-100 rounded-lg">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>삭제
-                                        </button>
+                                        <a href="${BOARD_URL}#comment_${review.id}" target="_blank" class="flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-gray-700 transition-colors px-2 py-1 bg-gray-50 hover:bg-gray-100 rounded-lg">
+                                            게시판에서 관리
+                                        </a>
                                     </div>
                                 </div>
-                                <p class="text-sm md:text-base text-gray-700 whitespace-pre-line leading-relaxed mt-2">${review.content}</p>
+                                <div class="text-sm md:text-base text-gray-700 whitespace-pre-line leading-relaxed mt-2 review-content-body">${review.content}</div>
                             </div>
                         </div>
                     </div>
                 `).join('');
-            };
-
-            const formatDate = (date) => {
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                const hours = String(date.getHours()).padStart(2, '0');
-                const minutes = String(date.getMinutes()).padStart(2, '0');
-                return `${year}.${month}.${day} ${hours}:${minutes}`;
             };
 
             if (reviewForm) {
@@ -1752,81 +1779,63 @@
                     reviewCharCount.innerText = `${length}/500`;
                 });
 
-                reviewForm.addEventListener('submit', (e) => {
+                reviewForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
                     if (!reviewName.value.trim() || !reviewPassword.value.trim() || !reviewContent.value.trim()) {
                         alert('모든 항목을 입력해주세요.');
                         return;
                     }
 
-                    if (window.editingReviewIdx !== undefined && window.editingReviewIdx !== null) {
-                        // Edit Mode
-                        reviews[window.editingReviewIdx].name = reviewName.value.trim();
-                        reviews[window.editingReviewIdx].password = reviewPassword.value.trim();
-                        reviews[window.editingReviewIdx].content = reviewContent.value.trim();
-                        // reviews[window.editingReviewIdx].date = formatDate(new Date()); 
-                        window.editingReviewIdx = null;
-                        document.getElementById('review-form-title').innerText = '후기 작성하기 ✨';
-                        document.getElementById('btn-submit-review').innerText = '등록하기';
-                    } else {
-                        // Create Mode
-                        const newReview = {
-                            name: reviewName.value.trim(),
-                            password: reviewPassword.value.trim(),
-                            content: reviewContent.value.trim(),
-                            date: formatDate(new Date())
-                        };
-                        reviews.unshift(newReview); // Add to top
+                    const submitBtn = document.getElementById('btn-submit-review');
+                    const originalBtnText = submitBtn.innerText;
+                    submitBtn.innerText = '등록 중...';
+                    submitBtn.disabled = true;
+
+                    try {
+                        const formData = new FormData();
+                        formData.append('act', 'procBoardInsertComment');
+                        formData.append('mid', 'board');
+                        formData.append('document_srl', '640');
+                        formData.append('nick_name', reviewName.value.trim());
+                        formData.append('password', reviewPassword.value.trim());
+                        formData.append('content', reviewContent.value.trim());
+
+                        if (csrfToken) {
+                            formData.append('_rx_csrf_token', csrfToken);
+                        }
+
+                        // Send the comment
+                        const response = await fetch(POST_URL, {
+                            method: 'POST',
+                            body: formData
+                            // No custom headers to allow typical browser form-data boundaries
+                        });
+
+                        if (response.ok) {
+                            // Close form
+                            document.getElementById('review-form-container').style.display = 'none';
+                            reviewForm.reset();
+                            reviewCharCount.innerText = '0/500';
+
+                            // Reload comments
+                            await loadComments();
+                            alert("후기가 성공적으로 등록되었습니다!");
+                        } else {
+                            alert("후기 등록에 실패했습니다. CORS 문제일 수 있습니다.");
+                        }
+
+                    } catch (err) {
+                        console.error("Submit Error:", err);
+                        alert("요청 중 오류가 발생했습니다.");
+                    } finally {
+                        submitBtn.innerText = originalBtnText;
+                        submitBtn.disabled = false;
                     }
-
-                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(reviews));
-                    renderReviews();
-                    document.getElementById('review-form-container').style.display = 'none';
-                    reviewForm.reset();
-                    reviewCharCount.innerText = '0/500';
                 });
-
-
             }
 
-            window.deleteReview = (idx) => {
-                const password = prompt("삭제를 위해 비밀번호(전화번호 뒷 4자리)를 입력해주세요.");
-                if (password === null) return;
-
-                if (password === reviews[idx].password) {
-                    if (confirm("정말로 이 후기를 삭제하시겠습니까?")) {
-                        reviews.splice(idx, 1);
-                        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(reviews));
-                        renderReviews();
-                    }
-                } else {
-                    alert("비밀번호가 일치하지 않습니다.");
-                }
-            };
-
-            window.editReview = (idx) => {
-                const password = prompt("수정을 위해 비밀번호(전화번호 뒷 4자리)를 입력해주세요.");
-                if (password === null) return;
-
-                if (password === reviews[idx].password) {
-                    const review = reviews[idx];
-                    reviewName.value = review.name;
-                    reviewPassword.value = review.password;
-                    reviewContent.value = review.content;
-                    reviewCharCount.innerText = `${review.content.length}/500`;
-
-                    window.editingReviewIdx = idx;
-                    document.getElementById('review-form-title').innerText = '후기 수정하기 ✨';
-                    document.getElementById('btn-submit-review').innerText = '수정하기';
-                    const formContainer = document.getElementById('review-form-container');
-                    formContainer.style.display = 'block';
-                    formContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                } else {
-                    alert("비밀번호가 일치하지 않습니다.");
-                }
-            };
-
-            renderReviews();
+            // Initial load
+            loadComments();
         });
     </script>
 </body>
