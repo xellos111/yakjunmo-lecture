@@ -1739,11 +1739,11 @@
                                         <h4 class="font-bold text-[#1a2332] text-sm md:text-base">${review.author}</h4>
                                         <p class="text-xs text-gray-400 mt-0.5">${review.dateText}</p>
                                     </div>
-                                    <div class="flex items-center gap-2">
-                                        <button onclick="handleEditReview('${review.id}', decodeURIComponent('${encodeURIComponent(review.author)}'), decodeURIComponent('${encodeURIComponent(review.content)}'))" class="flex items-center gap-1 text-[11px] md:text-xs font-semibold text-blue-500 hover:text-blue-700 transition-colors px-2 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-lg">
+                                    <div class="flex flex-row items-center gap-1 md:gap-2 shrink-0 ml-2">
+                                        <button onclick="handleEditReview('${review.id}', decodeURIComponent('${encodeURIComponent(review.author)}'), decodeURIComponent('${encodeURIComponent(review.content)}'))" class="whitespace-nowrap flex items-center gap-1 text-[11px] md:text-xs font-semibold text-blue-500 hover:text-blue-700 transition-colors px-2 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-lg shrink-0">
                                             수정
                                         </button>
-                                        <button onclick="handleDeleteReview('${review.id}')" class="flex items-center gap-1 text-[11px] md:text-xs font-semibold text-red-500 hover:text-red-700 transition-colors px-2 py-1.5 bg-red-50 hover:bg-red-100 rounded-lg">
+                                        <button onclick="handleDeleteReview('${review.id}')" class="whitespace-nowrap flex items-center gap-1 text-[11px] md:text-xs font-semibold text-red-500 hover:text-red-700 transition-colors px-2 py-1.5 bg-red-50 hover:bg-red-100 rounded-lg shrink-0">
                                             삭제
                                         </button>
                                     </div>
